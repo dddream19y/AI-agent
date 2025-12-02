@@ -121,3 +121,4 @@ def get_translate(text: str, target_lang: str) -> str:
     
 if __name__ == "__main__":
     mcp.run(transport="stdio")
+

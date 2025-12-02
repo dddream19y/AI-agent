@@ -8,6 +8,8 @@ from google.adk.models.lite_llm import LiteLlm
 import requests
 import os
 from dotenv import load_dotenv, dotenv_values
+from google.adk.agents.llm_agent import Agent
+from google.adk.tools import google_search
 
 # Load environment variables from .env file
 load_dotenv()
@@ -135,6 +137,8 @@ root_agent = LlmAgent(
         6. **draw_travel_tarot** (遠端): 當使用者要求「旅遊運勢」時，請使用此工具，並根據塔羅牌結果給予建議。
         8. **get_exchange_rates**、**convert_currency** : 當使用者要求「匯率轉換」時，請使用此工具，並將金額轉換成指定貨幣。
         9. **get_translate** : 當使用者要求「翻譯」時，請使用此工具，並將文字翻譯成指定語言。
+        10.**vibesong_playlist* (遠端): 當使用者要求「旅遊歌單」時，請使用此工具，並根據使用者的旅遊地點與偏好，推薦適合的音樂歌單。
+        11.**calculate_budget** : 當使用者要求「預算規劃」時，請使用此工具，並根據使用者的需求，計算並規劃旅遊預算。
         
         SYSTEM PROMPT:請用繁體中文回答問題。
         
@@ -173,7 +177,7 @@ root_agent = LlmAgent(
             ),
         ),
 
-        # 3. 根據天氣給使用者打包建議
+        # 3. Weather2mood 
         MCPToolset(
             connection_params=StdioServerParameters(
                 command=r"C:\Users\JINGYI\Desktop\1013Weather2mood\.venv\Scripts\python.exe",
@@ -212,6 +216,20 @@ root_agent = LlmAgent(
         MCPToolset(
             connection_params=SseConnectionParams(
                 url="http://127.0.0.1:5002/sse", 
+            ),
+        ),
+
+        # 7. vibesong_playlist
+        MCPToolset(
+            connection_params=SseConnectionParams(
+                url="http://127.0.0.1:8001/sse", 
+            ), 
+        ),
+
+        #8.calculate_budget
+        MCPToolset(
+            connection_params=SseConnectionParams(
+                url="http://127.0.0.1:5004/sse",
             ),
         ),
     ],
